@@ -1,10 +1,10 @@
 const db = require("../connection")
 const format = require("pg-format")
-const topicData = require("../data/development-data/topics")
-const userData = require("../data/development-data/users")
-const articleData = require("../data/development-data/articles")
-const { convertTimestampToDate } = require("../seeds/utils")
-const commentData = require("../data/development-data/comments")
+// const topicData = require("../data/development-data/topics")
+// const userData = require("../data/development-data/users")
+// const articleData = require("../data/development-data/articles")
+const { convertTimestampToDate, createRef } = require("../seeds/utils")
+// const commentData = require("../data/development-data/comments")
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db
@@ -96,24 +96,27 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       }
       );
       const articleInsertStr = format(
-        `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L`,
+        `INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url) VALUES %L RETURNING *`,
         formatArticles
       );
       return db.query(articleInsertStr)
     })
-    .then(() => {
+    .then((result) => {
+      const articlesRefObj = createRef(result.rows)
       const formatComments = commentData.map((comment) => {
         const convertComments = convertTimestampToDate(comment)
+        console.log(convertComments.article_title, '<<<<<<<')
         return [
-          convertComments.article_title,
+          articlesRefObj[convertComments.article_title],
           convertComments.body,
           convertComments.votes,
           convertComments.author,
           convertComments.created_at
         ]
-      });
+      }
+    );
       const commentInsertStr = format(
-        `INSERT INTO comments (article_title, body, votes, author, created_at) VALUES %L`,
+        `INSERT INTO comments (article_id, body, votes, author, created_at) VALUES %L`,
         formatComments
       );
       return db.query(commentInsertStr)
