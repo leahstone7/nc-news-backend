@@ -6,6 +6,7 @@ const { getApi } = require('./app/controllers/api.controller.js')
 const { getTopics } = require('./app/controllers/topics.controller.js')
 const { getArticleId } = require('./app/controllers/article_id.controller.js')
 const { getArticles } = require('./app/controllers/articles.controller.js')
+const { getArticleComments } = require('./app/controllers/article_id_comments.controller.js')
 
 app.get("/api", getApi)
 
@@ -14,6 +15,8 @@ app.get("/api/topics", getTopics)
 app.get("/api/articles/:article_id", getArticleId)
 
 app.get("/api/articles", getArticles)
+
+app.get("/api/articles/:article_id/comments", getArticleComments)
 
 app.use((err, req, res, next) => {
     console.log("Error:", err)
