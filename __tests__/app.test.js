@@ -34,8 +34,8 @@ describe("GET /api/topics", () => {
       const topics = response.body.topics
       expect(topics.length).toBe(3)
       topics.forEach((topic) => {
-        expect(typeof topic.description).toBe("string")
-        expect(typeof topic.slug).toBe("string")
+        expect(topic).toHaveProperty("description")
+        expect(topic).toHaveProperty("slug")
       })
     })
   })
@@ -80,6 +80,40 @@ describe("GET /api/articles/:article_id", () => {
     .expect(400)
     .then((response) => {
       expect(response.body.msg).toBe("Bad request")
+    })
+  })
+})
+
+describe("GET /api/articles", () => {
+  test("200: responds with array of articles objects with properties author, title, article_id, topic, created_at, votes, article_img_url, comment_count (sorted by created_at date and no body property)", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then((response) => {
+      const articles = response.body.articles
+      expect(articles).toBeSortedBy("created_at", {descending: true})
+      articles.forEach((article) => {
+        expect(article).toHaveProperty("author")
+        expect(article).toHaveProperty("title")
+        expect(article).toHaveProperty("article_id")
+        expect(article).toHaveProperty("topic")
+        expect(article).toHaveProperty("created_at")
+        expect(article).toHaveProperty("votes")
+        expect(article).toHaveProperty("article_img_url")
+        expect(article).toHaveProperty("comment_count")
+        expect(article).not.toHaveProperty("body")
+      })
+    })
+  })
+})
+
+describe("GET /api/articles error handling", () => {
+  test("404: responds with error if endpoint doesn't exist", () => {
+    return request(app)
+    .get("/api/endpointnotexist")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Not found")
     })
   })
 })
