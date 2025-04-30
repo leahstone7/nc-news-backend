@@ -1,4 +1,4 @@
-const { insertComment } = require("../models/post_comment.model.js")
+const { insertComment } = require("../models/comments.model.js")
 
 exports.postComments = (req, res, next) => {
     const { article_id } = req.params
