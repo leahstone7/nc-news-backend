@@ -63,6 +63,22 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts a new comment to the relevant article_id",
+    "requestBody": {
+      "username": "butter_bridge",
+      "body": "i love node"
+    }
+  },
+  "exampleResponse": {
+    "comment": {
+      "comment_id": 30,
+      "username" : "butter_bridge",
+      "body": "i love node",
+      "article_title" : "Running a Node App",
+      "votes": 22,
+      "created_at": 1602433380000
+    }
   }
-  
 }

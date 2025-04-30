@@ -126,6 +126,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     .then((response) => {
       const comments = response.body.comments
       expect(comments).toBeSortedBy("created_at", {descending: true})
+      expect(comments.length).toBe(2)
       comments.forEach((comment) => {
         expect(comment).toHaveProperty("comment_id")
         expect(comment).toHaveProperty("votes")
@@ -133,6 +134,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(comment).toHaveProperty("author")
         expect(comment).toHaveProperty("body")
         expect(comment).toHaveProperty("article_id")
+        expect(comment.article_id).toBe(3)
       })
     })
   })
@@ -154,5 +156,78 @@ describe("GET /api/articles/:article_id/comments error handling", () => {
     .then((response) => {
       expect(response.body.msg).toBe("Bad request")
     })
+  })
+})
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: responds with newly added comment", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "i love node",
+      article_title : "Running a Node App",
+      votes: 22,
+      created_at: 1602433380000
+    }
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send(newComment)
+    .expect(201)
+    .then((response) => {
+      const newlyPostedComment = response.body.comment
+      expect(newlyPostedComment.article_id).toBe(1)
+      expect(newlyPostedComment.body).toBe("i love node")
+      expect(newlyPostedComment.author).toBe("butter_bridge")
+      expect(newlyPostedComment).toHaveProperty("comment_id")
+    })
+  })
+})
+
+describe("POST /api/articles/:article_id/comments error handling", () => {
+test("400: responds with error if invalid article_id", () => {
+  const newComment = {
+    username: "butter_bridge",
+    body: "i love node",
+    article_title : "Running a Node App",
+    votes: 22,
+    created_at: 1602433380000
+  }
+  return request(app)
+  .post("/api/articles/notAnID/comments")
+  .send(newComment)
+  .expect(400)
+  .then((response) => {
+    expect(response.body.msg).toBe("Bad request")
+  })
+})
+test("400: responds with error if comment is missing body", () => {
+  const newComment = {
+    username: "butter_bridge",
+    article_title : "Running a Node App",
+    votes: 22,
+    created_at: 1602433380000
+  }
+  return request(app)
+  .post("/api/articles/1/comments")
+  .send(newComment)
+  .expect(400)
+  .then((response) => {
+    expect(response.body.msg).toBe("missing comment body")
+  })
+})
+test("404: responds with error if article does not exist", () => {
+  const newComment = {
+    username: "butter_bridge",
+    body: "i love node",
+    article_title : "Running a Node App",
+    votes: 22,
+    created_at: 1602433380000
+  }
+  return request(app)
+  .post("/api/articles/4747/comments")
+  .send(newComment)
+  .expect(404)
+  .then((response) => {
+    expect(response.body.msg).toBe("Not found")
+  })
   })
 })
