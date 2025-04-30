@@ -4,8 +4,8 @@ const db = require("./db/connection")
 
 const { getApi } = require('./app/controllers/api.controller.js')
 const { getTopics } = require('./app/controllers/topics.controller.js')
-const { getArticleId, getArticles, getArticleComments } = require('./app/controllers/articles.controller.js')
-const { postComments } = require('./app/controllers/comments.controller.js')
+const { getArticleId, getArticles } = require('./app/controllers/articles.controller.js')
+const { getArticleComments, postComments } = require('./app/controllers/comments.controller.js')
 
 app.use(express.json())
 
