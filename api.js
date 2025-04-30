@@ -5,7 +5,7 @@ const db = require("./db/connection")
 const { getApi } = require('./app/controllers/api.controller.js')
 const { getTopics } = require('./app/controllers/topics.controller.js')
 const { getArticleId, getArticles, patchArticles } = require('./app/controllers/articles.controller.js')
-const { getArticleComments, postComments } = require('./app/controllers/comments.controller.js')
+const { getArticleComments, postComments, deleteComment } = require('./app/controllers/comments.controller.js')
 
 app.use(express.json())
 
@@ -22,6 +22,8 @@ app.get("/api/articles/:article_id/comments", getArticleComments)
 app.post("/api/articles/:article_id/comments", postComments)
 
 app.patch("/api/articles/:article_id", patchArticles)
+
+app.delete("/api/comments/:comment_id", deleteComment)
 
 app.use((err, req, res, next) => {
     console.log("Error:", err)
