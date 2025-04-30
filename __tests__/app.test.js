@@ -277,3 +277,30 @@ describe("PATCH /api/articles/article:id error handling", () => {
     })
   })
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: deletes comment and responds with no content", () => {
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+  })
+})
+
+describe("DELETE /api/comments/:comment_id error handling", () => {
+  test("400: responds with error if invalid comment_id", () => {
+    return request(app)
+    .delete("/api/comments/banana")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("404: responds with error if comment does not exist", () => {
+    return request(app)
+    .delete("/api/comments/3737")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Not found")
+    })
+  })
+})

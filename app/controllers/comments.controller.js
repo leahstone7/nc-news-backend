@@ -1,4 +1,4 @@
-const { selectAllArticleComments, insertComment } = require("../models/comments.model.js")
+const { selectAllArticleComments, insertComment, deleteSpecifiedCommentId } = require("../models/comments.model.js")
 
 exports.getArticleComments = (req, res, next) => {
     const { article_id } = req.params
@@ -30,4 +30,23 @@ exports.postComments = (req, res, next) => {
 })  .catch((err) => {
          next(err)
 })
+}
+
+exports.deleteComment = (req, res, next) => {
+    const {comment_id} = req.params
+    
+    if(isNaN(comment_id)){
+        return next({status: 400, msg: "Bad request"})
+    }
+
+    deleteSpecifiedCommentId(comment_id)
+    .then((result) => {
+        if(!result) {
+            return next({status: 404, msg: "Not found"})
+        }
+        res.status(204).send()
+    })
+    .catch((err) => {
+        next(err)
+    })
 }
