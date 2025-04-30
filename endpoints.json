@@ -80,5 +80,23 @@
       "votes": 22,
       "created_at": 1602433380000
     }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "patches/only updates the article votes with newVote",
+    "requestBody": {
+      "newVote": 10
+    },
+    "exampleResponse": {
+    "title" : "Z",
+    "topic" : "mitch",
+    "author" : "icellusedkars",
+    "body" : "I was hungry.",
+    "created_at": 1578406080000,
+    "votes" : 10,
+    "article_img_url":
+      "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
   }
-}
+    }
+   
+  }
+

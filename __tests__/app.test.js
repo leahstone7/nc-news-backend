@@ -231,3 +231,49 @@ test("404: responds with error if article does not exist", () => {
   })
   })
 })
+
+describe("PATCH /api/articles/article:id", () => {
+  test("200: responds with updated votes by article_id (increments)", () => {
+    return request(app)
+    .patch("/api/articles/7")
+    .send({ newVote: 10 })
+    .expect(200)
+    .then((response) => {
+      const article = response.body.article
+      expect(article.article_id).toBe(7)
+      expect(article.votes).toBe(10)
+    })
+  })
+  test("200: responds with updated votes by article_id (decrements)", () => {
+    return request(app)
+    .patch("/api/articles/7")
+    .send({ newVote: -2 })
+    .expect(200)
+    .then((response) => {
+      const article = response.body.article
+      expect(article.article_id).toBe(7)
+      expect(article.votes).toBe(-2)
+    })
+  })
+})
+
+describe("PATCH /api/articles/article:id error handling", () => {
+  test("400: responds with error if invalid article_id", () => {
+    return request(app)
+    .patch("/api/articles/banana")
+    .send({ newVote: -2 })
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("404: responds with error if article does not exist", () => {
+    return request(app)
+    .patch("/api/articles/47")
+    .send({ newVote: 10 })
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Not found")
+    })
+  })
+})
