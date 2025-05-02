@@ -387,12 +387,45 @@ describe("GET /api/articles (sorting queries)", () => {
       })
     })
   })
+  test("200: responds with articles in ascending order instead of default descending when specified", () => {
+    return request(app)
+    .get("/api/articles?sort_by=topic&order=asc")
+    .expect(200)
+    .then((response) => {
+      const articles = response.body.articles
+      expect(articles).toBeSortedBy("topic", {descending: false})
+      articles.forEach((article) => {
+        expect(article).toHaveProperty("article_id")
+        expect(article).toHaveProperty("topic")
+        expect(article).toHaveProperty("author")
+        expect(article).toHaveProperty("created_at")
+        expect(article).toHaveProperty("votes")
+        expect(article).toHaveProperty("article_img_url")
+      })
+    })
+  })
 })
 
 describe("GET /api/articles (sorting queries) error handling", () => {
   test("400: responds with error when column is invalid", () => {
     return request(app)
     .get("/api/articles?sort_by=colour")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("400: responds with error when invalid order value", () => {
+    return request(app)
+    .get("/api/articles?sort_by=topic&order=invalid")
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad request")
+    })
+  })
+  test("400: responds with error when sort_by mispelled", () => {
+    return request(app)
+    .get("/api/articles?stor_by=topic")
     .expect(400)
     .then((response) => {
       expect(response.body.msg).toBe("Bad request")
