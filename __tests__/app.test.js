@@ -399,3 +399,43 @@ describe("GET /api/articles (sorting queries) error handling", () => {
     })
   })
 })
+
+describe("GET /api/articles (topic query", () => {
+  test("200: responds with filtered articles by specified topic", () => {
+    return request(app)
+    .get("/api/articles?topic=cats")
+    .expect(200)
+    .then((response) => {
+    const articles = response.body.articles
+    expect(articles.length).toBe(1)
+    articles.forEach((article) => {
+      expect(article).toHaveProperty("article_id")
+      expect(article).toHaveProperty("topic")
+      expect(article).toHaveProperty("author")
+      expect(article).toHaveProperty("created_at")
+      expect(article).toHaveProperty("votes")
+      expect(article).toHaveProperty("article_img_url")
+      expect(article.topic).toBe("cats")
+    })
+  })
+  })
+  test("200: responds with an empty array if there are no articles with that topic (valid topic)", () => {
+    return request(app)
+    .get("/api/articles?topic=paper")
+    .expect(200)
+    .then((response) => {
+      expect(response.body.articles).toEqual([])
+    })
+  })
+})
+
+describe("GET /api/articles (topic query) error handling", () => {
+  test("404: responds with error if no topic with that name", () => {
+    return request(app)
+    .get("/api/articles?topic=bananas")
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Not found")
+    })
+  })
+})
