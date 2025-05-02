@@ -10,7 +10,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
     }
 
     if(!allowedOrders.includes(order)){
-        order = "desc"
+       return Promise.reject({status: 400, msg: "Bad request"})
     }
 
     let queryStr = `SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT (comments.comment_id) :: INT AS comment_count FROM articles
