@@ -2,7 +2,7 @@
 This is the backend API for the NC News project, built using Node.js, Express, and PostgreSQL. It provides a RESTful API for accessing, creating, updating, and deleting news articles, comments, topics, and users from a PostgreSQL database.
 
 The hosted API is available here:
-https://nc-news-backend-project.onrender.com/api
+https://nc-news-guvj.onrender.com
 
 **Features:**
 Serve JSON data for articles, topics, users, and comments.
