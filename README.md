@@ -1,10 +1,10 @@
-NC News Backend
+**NC News Backend**
 This is the backend API for the NC News project, built using Node.js, Express, and PostgreSQL. It provides a RESTful API for accessing, creating, updating, and deleting news articles, comments, topics, and users from a PostgreSQL database.
 
 The hosted API is available here:
 https://nc-news-backend-project.onrender.com/api
 
-Features:
+**Features:**
 Serve JSON data for articles, topics, users, and comments.
 
 Full CRUD functionality for comments and articles.
@@ -15,7 +15,7 @@ Robust error handling and custom error messages.
 
 Follows RESTful principles with a clear and consistent API structure.
 
-Technologies:
+**Technologies:**
 Node.js
 
 Express
@@ -26,7 +26,7 @@ pg-promise
 
 Jest & Supertest (for testing)
 
-To set up the environment for development and testing:
+**To set up the environment for development and testing:**
 
 1. Create a new file in the root directory called .env.development
 
@@ -39,7 +39,7 @@ To set up the environment for development and testing:
     PGDATABASE=nc_news_test
 
 
-🔧 Endpoints Include:
+**Endpoints Include:**
 GET /api/topics – get all topics
 
 GET /api/articles – get all articles with sorting & filtering
